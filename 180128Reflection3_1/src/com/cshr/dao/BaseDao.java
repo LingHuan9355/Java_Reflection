@@ -209,7 +209,7 @@ public class BaseDao {
      	   pst = conn.prepareStatement(sb.toString());
      	   rs = pst.executeQuery();
            while(rs.next()){
-        	   for (int i = 1; i < fs.length; i++) {
+        	   for (int i = 0; i < fs.length; i++) {
         		   if(rs.getObject(fs[i].getName()) instanceof BigDecimal){
 						BigDecimal big = (BigDecimal) rs.getObject(fs[i].getName());
 						int value = big.intValue();
@@ -271,8 +271,12 @@ public class BaseDao {
                    java.util.Date date = (Date) fs[i].get(obj);
                    Date sdate = new Date(date.getTime());
 				   pst.setObject(i, sdate);
-				}else {
-					pst.setObject(i,fs[i].get(obj));
+				}else if(fs[i].get(obj) instanceof BigDecimal){
+					BigDecimal big = (BigDecimal)fs[i].get(obj);
+					int value = big.intValue();
+					pst.setObject(i,value); 
+				}else{
+					  pst.setObject(i,fs[i].get(obj));
 				}
 				
 			}
